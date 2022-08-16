@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import * as Colyseus from "colyseus.js"; 
 
 function App() {
+  let [client] = useState(new Colyseus.Client('ws://localhost:4000'))
+  let [room, setRoom] = useState<Colyseus.Room<unknown>|undefined>(undefined)
+  
+  useEffect(()=>{
+    if(!room){
+      joinOrCreate()
+  }})
+
+  async function joinOrCreate(){
+    setRoom(await client.joinOrCreate('my_room'))
+  }
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <p>{room?.name}, {room?.id}, {room?.sessionId}</p>
     </div>
   );
 }
+
 
 export default App;
