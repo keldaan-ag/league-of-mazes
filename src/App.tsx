@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
-import * as Colyseus from "colyseus.js"; 
+import * as Colyseus from "colyseus.js";
+import { IGame } from './types';
 
 function App() {
-  let [client] = useState(new Colyseus.Client('ws://localhost:4000'))
-  let [room, setRoom] = useState<Colyseus.Room<unknown>|undefined>(undefined)
+  let client = useRef(new Colyseus.Client('ws://localhost:4000'))
+  let room = useRef<Colyseus.Room<IGame>>()
+  let connected = useRef<boolean>(false)
+  let [gameState, setGameState] = useState<IGame|undefined>(undefined)
   
   useEffect(()=>{
-    if(!room){
+    if(!room.current && !connected.current){
+      connected.current = true
       joinOrCreate()
   }})
 
   async function joinOrCreate(){
-    setRoom(await client.joinOrCreate('my_room'))
+    room.current = await client.current.joinOrCreate('GameRoom')
+    room.current.onStateChange((state) => {
+      setGameState(state as IGame)
+    });
   }
   
   return (
     <div className="App">
-      <p>{room?.name}, {room?.id}, {room?.sessionId}</p>
+      <p>{gameState?.time} {JSON.stringify(gameState?.players)}</p>
     </div>
   );
 }
