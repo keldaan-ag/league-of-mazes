@@ -1,71 +1,77 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
-import * as Colyseus from "colyseus.js";
-import { GameState, ICell, IBuildClick, Phase, Player, Transfer } from './types';
-import { ArraySchema } from '@colyseus/schema';
+import { GameState, ICell, IBuildClick, Phase, Player, Transfer, Cell, Maze, IMaze } from './types';
+import { ArraySchema, DataChange } from '@colyseus/schema';
 import { Wait } from './components/Wait';
+import { useAppDispatch, useAppSelector } from './hooks';
+import { addPlayer, changeCell, changeMaze, setHeight, setPhase, setTime, setWidth } from './stores/gameReducer';
+import { Header } from './components/Header';
+import { joinGame } from './stores/networkReducer';
+import { Room } from 'colyseus.js';
 
 function App() {
-  let client = useRef(new Colyseus.Client('ws://localhost:4000'))
-  let room = useRef<Colyseus.Room<GameState>>()
+  const client = useAppSelector(state=>state.network.client)
+  let gameRoom = useAppSelector(state=>state.network.gameRoom)
   let connected = useRef<boolean>(false)
-  let [time, setTime] = useState<number>(0)
-  let [phase, setPhase] = useState<Phase>(Phase.WAIT)
-  let [players, setPlayers] = useState<Player[]>()
+  const dispatch = useAppDispatch()
   
   useEffect(()=>{
-    if(!room.current && !connected.current){
+    if(!gameRoom && !connected.current){
       connected.current = true
       joinOrCreate()
   }})
 
   async function joinOrCreate(){
-    room.current = await client.current.joinOrCreate('GameRoom')
-    addStateListeners()
+    const room: Room<GameState> = await client.joinOrCreate('GameRoom')
+    dispatch(joinGame(room))
+    addStateListeners(room)
   }
 
-  function cellClick(id: string,x: number,y: number){
-    room.current?.send(Transfer.BUILD_CLICK,{id,x,y} as IBuildClick)
-  }
+  function addStateListeners(room: Room<GameState>){
+    room.state.onChange = changes => {
+      changes.forEach(change=>{
+        if(change.field === 'time'){
+          dispatch(setTime(change.value))
+        }
+        else if(change.field === 'phase'){
+          dispatch(setPhase(change.value))
+        }
+        else if(change.field === 'width'){
+          dispatch(setWidth(change.value))
+        }
+        else if(change.field === 'height'){
+          dispatch(setHeight(change.value))
+        }
+        else if(change.field === 'phase'){
+          dispatch(setPhase(change.value))
+        }
+      })
+    }
+    (room.state.players as ArraySchema<Player>).onAdd = (player: Player, playerIndex: number) =>{
+      dispatch(addPlayer(player));
 
-  function addStateListeners(){
-    if(room.current){
-      room.current.state.onChange = changes => {
+      (player.maze as Maze).onChange = (changes: DataChange<any>[])=>{
         changes.forEach(change=>{
-          if(change.field === 'time'){
-            setTime(change.value)
-          }
-          if(change.field === 'phase'){
-            setPhase(change.value)
+          dispatch(changeMaze({id: player.id, field: change.field as keyof IMaze, value: change.value}))
+          if(change.field==='data'){
+            (player.maze.data as ArraySchema<ICell>).onAdd = (cell: ICell, cellIndex: number) => {
+        
+              (cell as Cell).onChange = (changes =>{
+                changes.forEach(change=>{
+                  dispatch(changeCell({id: player.id, x: cell.x, y:cell.y, field: change.field as keyof ICell, value: change.value}))
+                })
+              })
+            }
           }
         })
-      }
-      (room.current.state.players as ArraySchema<Player>).onAdd = (player: Player, key: number) =>{
-        setPlayers(room.current!.state.players);
-        /*
-        player.onChange = (changes=>{
-          changes.forEach(change=>{
-            console.log(change.field)
-          })
-        });
-
-        player.maze.onChange = (changes =>{
-          changes.forEach(change=>{
-            console.log(change.field)
-          })
-        });
-        */
-        (player.maze.data as ArraySchema<ICell>).onChange = (cell) => {
-          setPlayers(room.current!.state.players)
-        }
       }
     }
   }
   
   return (
     <div className="App">
-      <p>Time {time} Phase {phase}</p>
-      <Wait players={players} cellClick={cellClick}/>
+      <Header/>
+      <Wait/>
     </div>
   );
 }
