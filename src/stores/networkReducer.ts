@@ -23,11 +23,14 @@ export const gameSlice = createSlice({
     },
     cellClick: (state, action: PayloadAction<{id: string,x: number,y: number}>) => {
         state.gameRoom?.send(Transfer.BUILD_CLICK,action.payload as IBuildClick)
+    },
+    guessClick: (state, action: PayloadAction<string>)=>{
+        state.gameRoom?.send(Transfer.GUESS_CLICK, action.payload)
     }
   }
 });
 
 
-export const { joinGame, cellClick } = gameSlice.actions;
+export const { joinGame, cellClick, guessClick } = gameSlice.actions;
 
 export default gameSlice.reducer;

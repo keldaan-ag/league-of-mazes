@@ -1,11 +1,12 @@
 import { useAppSelector } from "../hooks";
 import { MazeDisplay } from "./MazeDisplay";
 
-export function Wait(){
-    const players = useAppSelector(state=>state.game.players)
-    if(players.length > 0){
+export function Build(){
+    const id = useAppSelector(state=>state.game.id)
+    const player = useAppSelector(state=>state.game.players.find(p=>p.id === id))
+    if(player){
         return <div style={{display:'flex', flexWrap:'wrap', margin:'10px', gap:'20px', justifyContent:'center'}}>
-        {players.map(player=><MazeDisplay key={player.id} player={player}/>)}
+       <MazeDisplay key={player.id} player={player}/>
     </div>
     }
     else{

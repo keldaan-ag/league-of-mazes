@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ICell, IGame, IMaze, IPlayer, Phase, Player } from '../types';
 
-const initialState: IGame = {
+interface IClientGame extends IGame{
+  id: string | undefined,
+  guessId: string
+}
+
+const initialState: IClientGame = {
   width: 0,
   height: 0,
   buildTime: 0,
@@ -9,7 +14,9 @@ const initialState: IGame = {
   waitTime: 0,
   phase: Phase.BUILD,
   players: [],
-  time: 0
+  time: 0,
+  id: undefined,
+  guessId: ''
 }
 
 export const gameSlice = createSlice({
@@ -25,7 +32,7 @@ export const gameSlice = createSlice({
         const index = state.players.findIndex(u => u.id == action.payload.id)
 
         if(index != -1) {
-          state.players[index][action.payload.field] = JSON.parse(JSON.stringify(action.payload.value))
+          (state.players[index][action.payload.field] as any) = JSON.parse(JSON.stringify(action.payload.value))
         }
     },
     changeCell: (state, action: PayloadAction<{id: string, x: number, y: number, field: keyof ICell, value: any}>) => {
@@ -57,11 +64,17 @@ export const gameSlice = createSlice({
     },
     setPhase: (state, action: PayloadAction<Phase>) => {
       state.phase = action.payload
+    },
+    setId: (state, action: PayloadAction<string>) => {
+      state.id = action.payload
+    },
+    setGuessId: (state, action: PayloadAction<string>) =>{
+      state.guessId = action.payload
     }
   }
 });
 
 
-export const { addPlayer, changePlayer, setTime, setWidth, setHeight, setPhase, changeCell, changeMaze } = gameSlice.actions;
+export const {setGuessId, setId, addPlayer, changePlayer, setTime, setWidth, setHeight, setPhase, changeCell, changeMaze } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -1,7 +1,8 @@
 import { ArraySchema, Schema, type } from "@colyseus/schema";
 
 export enum Transfer {
-    BUILD_CLICK='BUILD_CLICK'
+    BUILD_CLICK='BUILD_CLICK',
+    GUESS_CLICK='GUESS_CLICK'
 }
 
 export interface IBuildClick{
@@ -17,7 +18,9 @@ export interface ICoordinate {
 
 export interface IPlayer{
     id: string
-    maze: IMaze 
+    maze: IMaze
+    guessId: string
+    points: number
 }
 
 export interface IMaze{
@@ -104,11 +107,15 @@ export class Maze extends Schema implements IMaze{
 export class Player extends Schema implements IPlayer{
     @type("string") id: string
     @type(Maze) maze: Maze
+    @type("string") guessId: string
+    @type("number") points: number
 
     constructor(id: string, maze: IMaze){
         super()
         this.id = id
+        this.guessId = ''
         this.maze = new Maze(maze)
+        this.points = 0
     }
 }
 
