@@ -33,7 +33,7 @@ export function MazeDisplay(props:{player: IPlayer}){
                             id={props.player.id}
                             key={`cell-${cell.x}-${cell.y}`}
                             cell={cell}
-                            cellSize={phase === Phase.BUILD ? '6vh': '3vh'}
+                            cellSize={phase === Phase.BUILD || phase === Phase.DRAW ? '6vh': '3vh'}
                             />)
                         }</tr>)}
                 </tbody>

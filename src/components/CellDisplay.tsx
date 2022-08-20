@@ -11,7 +11,7 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: string}){
     useEffect(()=>{setColor(getColor())},[props.cell])
 
     function getColor(){
-        return props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white'
+        return props.cell.isPath ? 'lightpink': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white'
     }
     
     return <td className='cell' style={{
@@ -23,5 +23,6 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: string}){
         }}
         onMouseEnter={(e)=>{if(color === 'white'&& phase === Phase.BUILD) setColor('yellow')}}
         onMouseLeave={(e)=>{setColor(getColor())}}
-        onClick={()=>{dispatch(cellClick({id: props.id, x: props.cell.x, y: props.cell.y}))}}></td>
+        onClick={()=>{dispatch(cellClick({id: props.id, x: props.cell.x, y: props.cell.y}))}}>
+        </td>
 }

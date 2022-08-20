@@ -11,6 +11,20 @@ export interface IBuildClick{
     id:string
 }
 
+export interface INode{
+    id: string
+    edges: string[]
+    x: number
+    y: number
+    visited: boolean
+}
+
+export interface IGraph{
+    nodes: Map<string,INode>
+    entry: ICoordinate
+    exit: ICoordinate
+}
+
 export interface ICoordinate {
     x: number
     y: number
@@ -36,7 +50,8 @@ export interface ICell{
     y: number,
     isEntry: boolean,
     isExit: boolean,
-    isWall: boolean
+    isWall: boolean,
+    isPath: boolean
 }
 
 export interface IGame{
@@ -64,6 +79,7 @@ export class Cell extends Schema implements ICell{
     @type("boolean") isEntry: boolean;
     @type("boolean") isExit: boolean;
     @type("boolean") isWall: boolean;
+    @type("boolean") isPath: boolean;
     
     constructor(cell: ICell){
         super()
@@ -72,6 +88,7 @@ export class Cell extends Schema implements ICell{
         this.isEntry = cell.isEntry
         this.isExit = cell.isExit
         this.isWall = cell.isWall
+        this.isPath = cell.isPath
     }
 }
 
@@ -101,6 +118,28 @@ export class Maze extends Schema implements IMaze{
         this.exit = new Coordinate(maze.exit)
         this.data = new ArraySchema<ICell>()
         maze.data.forEach(d=>{this.data.push(new Cell(d))})
+    }
+
+    getEdges(x: number, y: number){
+        const edges = new Array<string>();
+        [x-1,x,x+1].forEach(xi => {
+          [y-1,y,y+1].forEach(yi => {
+            const v = this.getValue(xi, yi)
+            if(v && !v.isWall){
+                edges.push(`${x}-${y}`)
+            }
+          })  
+        })
+        return edges
+    }
+
+    getValue(x: number, y: number) : undefined | ICell{
+        if(x >= 0 && y >= 0 && x < this.width && y < this.height){
+            return this.data[this.height * x + y]
+        }
+        else{
+            return undefined
+        }
     }
 }
 
