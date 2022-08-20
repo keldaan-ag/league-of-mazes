@@ -7,7 +7,10 @@ interface INetwork {
     gameRoom: Room<GameState> | undefined;
 }
 
-const endpoint = 'ws://localhost:4000'
+const localEndpoint = 'ws://localhost:4000'
+const colyseusEndpoint = 'wss://e3zymu.colyseus.de'
+
+const endpoint = localEndpoint
 
 const initialState: INetwork = {
     client: new Client(endpoint),
