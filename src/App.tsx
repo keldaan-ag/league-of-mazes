@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
-import { GameState, ICell, IBuildClick, Phase, Player, Transfer, Cell, Maze, IMaze } from './types';
+import { GameState, ICell, IBuildClick, Phase, Player, Transfer, Cell, Maze, IMaze, IPlayer } from './types';
 import { ArraySchema, DataChange } from '@colyseus/schema';
 import { Wait } from './components/Wait';
 import { Build } from './components/build';
 import { useAppDispatch, useAppSelector } from './hooks';
-import { addPlayer, changeCell, changeMaze, setGuessId, setHeight, setId, setPhase, setTime, setWidth } from './stores/gameReducer';
+import { addPlayer, changeCell, changeMaze, changePlayer, setGuessId, setHeight, setId, setPhase, setTime, setWidth } from './stores/gameReducer';
 import { Header } from './components/Header';
 import { joinGame } from './stores/networkReducer';
 import { Room } from 'colyseus.js';
 import { Guess } from './components/Guess';
+import { Leaderboard } from './components/Leaderboard';
 
 
 function App() {
@@ -57,9 +58,11 @@ function App() {
 
       player.onChange = (changes) => {
         changes.forEach(change=>{
-          if(change.field === 'guessId'){
+          console.log(room.sessionId, player.id, change.field)
+          if(change.field === 'guessId' && room.sessionId === player.id){
             dispatch(setGuessId(change.value))
           }
+          dispatch(changePlayer({id: player.id, field: change.field as keyof IPlayer, value: change.value}))
         })
       }
 
@@ -105,6 +108,7 @@ function App() {
   }
   return (
     <div className="App">
+      <Leaderboard/>
       <Header/>
       {content}
     </div>

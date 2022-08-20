@@ -35,6 +35,7 @@ export interface IPlayer{
     maze: IMaze
     guessId: string
     points: number
+    rank: number
 }
 
 export interface IMaze{
@@ -122,13 +123,12 @@ export class Maze extends Schema implements IMaze{
 
     getEdges(x: number, y: number){
         const edges = new Array<string>();
-        [x-1,x,x+1].forEach(xi => {
-          [y-1,y,y+1].forEach(yi => {
-            const v = this.getValue(xi, yi)
+
+        [[x-1,y], [x+1,y], [x,y-1], [x,y+1]].forEach(c =>{
+            const v = this.getValue(c[0], c[1])
             if(v && !v.isWall){
-                edges.push(`${x}-${y}`)
+                edges.push(`${c[0]}-${c[1]}`)
             }
-          })  
         })
         return edges
     }
@@ -148,6 +148,7 @@ export class Player extends Schema implements IPlayer{
     @type(Maze) maze: Maze
     @type("string") guessId: string
     @type("number") points: number
+    @type("number") rank: number
 
     constructor(id: string, maze: IMaze){
         super()
@@ -155,6 +156,7 @@ export class Player extends Schema implements IPlayer{
         this.guessId = ''
         this.maze = new Maze(maze)
         this.points = 0
+        this.rank = 0
     }
 }
 

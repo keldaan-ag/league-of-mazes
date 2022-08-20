@@ -20,11 +20,14 @@ export function MazeDisplay(props:{player: IPlayer}){
         style={{
             backgroundColor:id === props.player.id ? 'lightyellow':'white',
             border:guessId === props.player.id ? '2px solid red':'1px solid black',
-            padding:'10px'
+            padding:'10px',
+            cursor: phase === Phase.GUESS? 'pointer': 'auto'
         }}
         onClick={()=>{if(phase === Phase.GUESS){dispatch(guessClick(props.player.id))}}}
     >
-        <p style={{margin:'0px'}}>Player #{props.player.id} {id === props.player.id ? '(You)' : ''}</p>
+        <p style={{margin:'0px'}}>
+            Player #{props.player.id} {id === props.player.id ? '(You)' : ''}
+        </p>
         <div>
             {<table>
                 <tbody>
@@ -33,11 +36,12 @@ export function MazeDisplay(props:{player: IPlayer}){
                             id={props.player.id}
                             key={`cell-${cell.x}-${cell.y}`}
                             cell={cell}
-                            cellSize={phase === Phase.BUILD || phase === Phase.DRAW ? '6vh': '3vh'}
+                            cellSize={phase === Phase.BUILD ? '6vh': '3vh'}
                             />)
                         }</tr>)}
                 </tbody>
             </table>}
+            {props.player.rank ? <div style={{width:'100%', textAlign:'center', fontSize:'2em'}}>Rank #{props.player.rank}</div>: null}
         </div>
     </div>
 }

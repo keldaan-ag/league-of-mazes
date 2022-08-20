@@ -11,7 +11,7 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: string}){
     useEffect(()=>{setColor(getColor())},[props.cell])
 
     function getColor(){
-        return props.cell.isPath ? 'lightpink': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white'
+        return props.cell.isPath ? '#60f542': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white'
     }
     
     return <td className='cell' style={{
