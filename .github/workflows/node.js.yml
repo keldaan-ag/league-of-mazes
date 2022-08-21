@@ -1,16 +1,14 @@
-name: Node.js CI
-
+name: Build and Deploy
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
-      - uses: EdricChan03/action-build-deploy-ghpages@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v3
+    - name: Build & Deploy React app to GitHub Pages
+      uses: MrKrishnaAgarwal/deploy-react-app-to-gh-pages@v1.0.0
