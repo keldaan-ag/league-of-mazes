@@ -28,6 +28,12 @@ export const gameSlice = createSlice({
       const u: IPlayer = JSON.parse(JSON.stringify(action.payload))
       state.players.push(u)
     },
+    removePlayer: (state, action: PayloadAction<Player>) => {
+      const index = state.players.findIndex(p=>p.id === action.payload.id)
+      if(index !== -1){
+        state.players.splice(index, 1)
+      }
+    },
     changePlayer: (state, action: PayloadAction<{id: string, field: keyof IPlayer, value: any}>) => {
         const index = state.players.findIndex(u => u.id == action.payload.id)
 
@@ -49,9 +55,6 @@ export const gameSlice = createSlice({
       if(index != -1) {
         state.players[index].maze[action.payload.field] = JSON.parse(JSON.stringify(action.payload.value))
       }
-    },
-    removePlayer: (state, action: PayloadAction<string>) => {
-        state.players.splice(state.players.findIndex(u => u.id == action.payload), 1)
     },
     setTime: (state, action: PayloadAction<number>) => {
       state.time = action.payload
@@ -75,6 +78,6 @@ export const gameSlice = createSlice({
 });
 
 
-export const {setGuessId, setId, addPlayer, changePlayer, setTime, setWidth, setHeight, setPhase, changeCell, changeMaze } = gameSlice.actions;
+export const { removePlayer, setGuessId, setId, addPlayer, changePlayer, setTime, setWidth, setHeight, setPhase, changeCell, changeMaze } = gameSlice.actions;
 
 export default gameSlice.reducer;

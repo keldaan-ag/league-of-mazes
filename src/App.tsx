@@ -5,7 +5,7 @@ import { ArraySchema, DataChange } from '@colyseus/schema';
 import { Wait } from './components/Wait';
 import { Build } from './components/build';
 import { useAppDispatch, useAppSelector } from './hooks';
-import { addPlayer, changeCell, changeMaze, changePlayer, setGuessId, setHeight, setId, setPhase, setTime, setWidth } from './stores/gameReducer';
+import { addPlayer, changeCell, changeMaze, changePlayer, removePlayer, setGuessId, setHeight, setId, setPhase, setTime, setWidth } from './stores/gameReducer';
 import { Header } from './components/Header';
 import { joinGame } from './stores/networkReducer';
 import { Room } from 'colyseus.js';
@@ -81,6 +81,10 @@ function App() {
           }
         })
       }
+    }
+
+    (room.state.players as ArraySchema<Player>).onRemove = (item: Player, key: number) =>{
+      dispatch(removePlayer(item))
     }
   }
 

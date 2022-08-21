@@ -26,7 +26,7 @@ export function MazeDisplay(props:{player: IPlayer}){
         onClick={()=>{if(phase === Phase.GUESS){dispatch(guessClick(props.player.id))}}}
     >
         <p style={{margin:'0px'}}>
-            Player #{props.player.id} {id === props.player.id ? '(You)' : ''}
+            {props.player.displayName} {id === props.player.id ? '(You)' : ''}
         </p>
         <div>
             {<table>

@@ -10,7 +10,7 @@ interface INetwork {
 const localEndpoint = 'ws://localhost:4000'
 const colyseusEndpoint = 'wss://e3zymu.colyseus.de'
 
-const endpoint = localEndpoint
+const endpoint = process.env.NODE_ENV === 'development' ? localEndpoint :colyseusEndpoint
 
 const initialState: INetwork = {
     client: new Client(endpoint),
