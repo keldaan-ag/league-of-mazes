@@ -35,16 +35,16 @@ export const gameSlice = createSlice({
       }
     },
     changePlayer: (state, action: PayloadAction<{id: string, field: keyof IPlayer, value: any}>) => {
-        const index = state.players.findIndex(u => u.id == action.payload.id)
+        const index = state.players.findIndex(u => u.id === action.payload.id)
 
-        if(index != -1) {
+        if(index !== -1) {
           (state.players[index][action.payload.field] as any) = JSON.parse(JSON.stringify(action.payload.value))
         }
     },
     changeCell: (state, action: PayloadAction<{id: string, x: number, y: number, field: keyof ICell, value: any}>) => {
-      const index = state.players.findIndex(u => u.id == action.payload.id)
+      const index = state.players.findIndex(u => u.id === action.payload.id)
       const cellIndex = state.height * action.payload.x + action.payload.y
-      if(index != -1) {
+      if(index !== -1) {
         (state.players[index].maze.data[cellIndex][action.payload.field] as any) = JSON.parse(JSON.stringify(action.payload.value))
       }
 
@@ -52,7 +52,7 @@ export const gameSlice = createSlice({
     changeMaze: (state, action: PayloadAction<{id: string, field: keyof IMaze, value: any}>)=>{
       const index = state.players.findIndex(u => u.id === action.payload.id)
 
-      if(index != -1) {
+      if(index !== -1) {
         state.players[index].maze[action.payload.field] = JSON.parse(JSON.stringify(action.payload.value))
       }
     },

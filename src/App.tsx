@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './App.css';
-import { GameState, ICell, IBuildClick, Phase, Player, Transfer, Cell, Maze, IMaze, IPlayer } from './types';
+import { GameState, ICell, Phase, Player, Cell, Maze, IMaze, IPlayer } from './types';
 import { ArraySchema, DataChange } from '@colyseus/schema';
 import { Wait } from './components/Wait';
 import { Build } from './components/build';
