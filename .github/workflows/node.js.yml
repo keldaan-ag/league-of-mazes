@@ -10,11 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/setup-node@v2
+      - name: clean install
+        run: npm ci
         with:
           node-version: '16'
-        run: npm ci && npm run build
+      - name: build
+        run: npm run build
+        with:
+          node-version: '16'
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
