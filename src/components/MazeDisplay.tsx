@@ -8,6 +8,7 @@ export function MazeDisplay(props:{player: IPlayer}){
     const phase = useAppSelector(state=>state.game.phase)
     const id = useAppSelector(state=>state.game.id)
     const guessId = useAppSelector(state=>state.game.guessId)
+    const betNames = useAppSelector(state=>state.game.players.map((p,index,array)=>p.guessId === props.player.id ? p.displayName: '')).filter(s=>s!=='')
     let structuredData: ICell[][] = []
     for (let i = 0; i < props.player.maze.width; i++) {
         let column: ICell[] = []
@@ -42,6 +43,7 @@ export function MazeDisplay(props:{player: IPlayer}){
                 </tbody>
             </table>}
             {props.player.rank ? <div style={{width:'100%', textAlign:'center', fontSize:'2em'}}>Rank #{props.player.rank}</div>: null}
+            {betNames.length > 0 && (phase === Phase.DRAW || phase === Phase.GUESS)? <div>{betNames.map(name => name + ' ')}</div>: null}
         </div>
     </div>
 }

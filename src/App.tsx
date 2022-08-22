@@ -58,7 +58,6 @@ function App() {
 
       player.onChange = (changes) => {
         changes.forEach(change=>{
-          console.log(room.sessionId, player.id, change.field)
           if(change.field === 'guessId' && room.sessionId === player.id){
             dispatch(setGuessId(change.value))
           }
