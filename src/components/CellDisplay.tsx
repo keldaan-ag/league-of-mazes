@@ -8,8 +8,9 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: string}){
     const phase = useAppSelector(state=>state.game.phase)
     const [color, setColor] = useState<string>(getColor())
     
-    useEffect(()=>{setColor(getColor())},[props.cell])
+    useEffect(()=>{setColor(getColor())},[getColor, props.cell])
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function getColor(){
         return props.cell.isPath ? '#60f542': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'brown': props.cell.isHole ? 'darkblue': 'white'
     }
