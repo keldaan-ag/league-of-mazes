@@ -42,6 +42,7 @@ export function MazeDisplay(props:{player: IPlayer}){
                         }</tr>)}
                 </tbody>
             </table>}
+            {props.player.maze.score > 0 ? <div style={{fontSize:'1.5em'}}>{props.player.maze.score}</div>: null}
             {props.player.rank ? <div style={{width:'100%', textAlign:'center', fontSize:'2em'}}>Rank #{props.player.rank}</div>: null}
             {betNames.length > 0 && (phase === Phase.DRAW || phase === Phase.GUESS)? <div>{betNames.map(name => name + ' ')}</div>: null}
         </div>

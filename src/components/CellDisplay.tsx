@@ -8,17 +8,17 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: string}){
     const phase = useAppSelector(state=>state.game.phase)
     const [color, setColor] = useState<string>(getColor())
     
-    useEffect(()=>{setColor(props.cell.isPath ? '#60f542': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white')},[props.cell])
+    useEffect(()=>{setColor(getColor())},[props.cell])
 
     function getColor(){
-        return props.cell.isPath ? '#60f542': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'black': 'white'
+        return props.cell.isPath ? '#60f542': props.cell.isEntry ? 'green': props.cell.isExit ? 'red' : props.cell.isWall ? 'brown': props.cell.isHole ? 'darkblue': 'white'
     }
     
     return <td className='cell' style={{
         border:'1px solid black',
         height:props.cellSize,
         width:props.cellSize,
-        cursor: props.cell.isWall || phase !== Phase.BUILD ? 'not-allowed' : 'pointer',
+        cursor: props.cell.isHole || phase !== Phase.BUILD ? 'not-allowed' : 'pointer',
         backgroundColor: color
         }}
         onMouseEnter={(e)=>{if(color === 'white'&& phase === Phase.BUILD) setColor('yellow')}}

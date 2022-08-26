@@ -44,7 +44,8 @@ export interface IMaze{
     width: number,
     height: number,
     entry: ICoordinate,
-    exit: ICoordinate
+    exit: ICoordinate,
+    score: number
 }
 
 export interface ICell{
@@ -53,6 +54,7 @@ export interface ICell{
     isEntry: boolean,
     isExit: boolean,
     isWall: boolean,
+    isHole: boolean,
     isPath: boolean
 }
 
@@ -82,6 +84,7 @@ export class Cell extends Schema implements ICell{
     @type("boolean") isExit: boolean;
     @type("boolean") isWall: boolean;
     @type("boolean") isPath: boolean;
+    @type("boolean") isHole: boolean
     
     constructor(cell: ICell){
         super()
@@ -90,6 +93,7 @@ export class Cell extends Schema implements ICell{
         this.isEntry = cell.isEntry
         this.isExit = cell.isExit
         this.isWall = cell.isWall
+        this.isHole = cell.isHole
         this.isPath = cell.isPath
     }
 }
@@ -111,6 +115,7 @@ export class Maze extends Schema implements IMaze{
     @type("number") height: number
     @type(Coordinate) entry: ICoordinate
     @type(Coordinate) exit: ICoordinate
+    @type("number") score: number
 
     constructor(maze: IMaze){
         super()
@@ -119,6 +124,7 @@ export class Maze extends Schema implements IMaze{
         this.entry = new Coordinate(maze.entry)
         this.exit = new Coordinate(maze.exit)
         this.data = new ArraySchema<ICell>()
+        this.score = 0
         maze.data.forEach(d=>{this.data.push(new Cell(d))})
     }
 
