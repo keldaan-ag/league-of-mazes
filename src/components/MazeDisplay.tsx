@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { guessClick } from "../stores/networkReducer";
-import { Dungeon, ICell, IPlayer, Mask, Phase } from "../types";
+import { ICell, IPlayer, Mask, Phase } from "../types";
 import Tileset from '../types/tileset'
 import { CellDisplay } from "./CellDisplay";
 
