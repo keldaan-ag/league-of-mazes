@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/league-of-mazes/static/css/main.3805ca1f.css",
+    "main.js": "/league-of-mazes/static/js/main.b15f749c.js",
+    "static/js/787.4b15a709.chunk.js": "/league-of-mazes/static/js/787.4b15a709.chunk.js",
+    "index.html": "/league-of-mazes/index.html",
+    "main.3805ca1f.css.map": "/league-of-mazes/static/css/main.3805ca1f.css.map",
+    "main.b15f749c.js.map": "/league-of-mazes/static/js/main.b15f749c.js.map",
+    "787.4b15a709.chunk.js.map": "/league-of-mazes/static/js/787.4b15a709.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3805ca1f.css",
+    "static/js/main.b15f749c.js"
+  ]
+}
