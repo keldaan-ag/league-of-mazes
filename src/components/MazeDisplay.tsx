@@ -41,7 +41,7 @@ export function MazeDisplay(props:{player: IPlayer}){
         })
     
         const cellSize = phase === Phase.BUILD ? 50: 25
-    
+
         return <div 
             style={{
                 backgroundColor:id === props.player.id ? 'lightyellow':'white',

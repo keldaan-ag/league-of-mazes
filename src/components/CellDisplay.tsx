@@ -8,7 +8,7 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: number, ti
     const phase = useAppSelector(state=>state.game.phase)
     
     useEffect(()=>{
-        const canvas = document.getElementById(`${props.cell.x}-${props.cell.y}`) as HTMLCanvasElement
+        const canvas = document.getElementById(`${props.id}-${props.cell.x}-${props.cell.y}`) as HTMLCanvasElement
         if(canvas){
             const ctx = canvas.getContext('2d')
             ctx!.drawImage(props.image, props.tileCoord.x * 25 + 1 , props.tileCoord.y * 25 + 1, 24, 24, 0, 0, props.cellSize, props.cellSize)
@@ -43,7 +43,7 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: number, ti
             }
         }
 
-    },[props.cell, props.cellSize, props.image, props.tileCoord.x, props.tileCoord.y])
+    },[props.cell, props.cellSize, props.id, props.image, props.tileCoord.x, props.tileCoord.y])
     
     return <td className='cell' style={{
         height:`${props.cellSize}px`,
@@ -55,6 +55,6 @@ export function CellDisplay(props:{id: string, cell: ICell, cellSize: number, ti
         }}
 
         onClick={()=>{dispatch(cellClick({id: props.id, x: props.cell.x, y: props.cell.y}))}}>
-        <canvas width={props.cellSize} height={props.cellSize} id={`${props.cell.x}-${props.cell.y}`}></canvas>
+        <canvas width={props.cellSize} height={props.cellSize} id={`${props.id}-${props.cell.x}-${props.cell.y}`}></canvas>
         </td>
 }
